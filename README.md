@@ -2,6 +2,8 @@
 
 The Mini Trello Task Tracker (`mini_trello_tt`) is a lightweight project management tool inspired by Trello. It allows users to create, update, and organize tasks across different columns, such as TODO, IN PROGRESS, and DONE, with features like drag-and-drop for task reordering and a mock GraphQL server for backend simulation.
 
+https://github.com/mykrenko/Mini-Trello/assets/132960479/7fb815c9-a9a4-43b8-ae5c-31328af05070
+
 ## Features
 
 - **Task Management**: Create, update, and delete tasks.
