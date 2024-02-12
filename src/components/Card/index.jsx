@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
@@ -83,22 +83,28 @@ const Card = ({ id, title, description, column }) => {
     },
   });
 
-  const handleDelete = (e) => {
-    e.stopPropagation();
-    if (window.confirm("Are you sure you want to delete this card?"))
-      deleteCard();
-  };
+  const handleDelete = useCallback(
+    (e) => {
+      e.stopPropagation();
+      if (window.confirm("Are you sure you want to delete this card?"))
+        deleteCard();
+    },
+    [deleteCard]
+  );
 
-  const handleEdit = (e) => {
+  const handleEdit = useCallback((e) => {
     e.stopPropagation();
     dispatch({ type: "EDIT" });
-  };
+  }, []);
 
-  const handleSave = (e) => {
-    e.stopPropagation();
-    updateCard();
-    dispatch({ type: "SAVE" });
-  };
+  const handleSave = useCallback(
+    (e) => {
+      e.stopPropagation();
+      updateCard();
+      dispatch({ type: "SAVE" });
+    },
+    [updateCard]
+  );
 
   const handleChange = (e, field) => {
     dispatch({ type: "CHANGE", field, value: e.target.value });
