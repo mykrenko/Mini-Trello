@@ -30,7 +30,7 @@ The Mini Trello Task Tracker (`mini_trello_tt`) is a lightweight project managem
 1. Clone the repository:
 
    ```bash
-   git clone https://example.com/mini_trello_tt.git
+   git clonehttps://github.com/mykrenko/Mini-Trello.git
    cd mini_trello_tt
    ```
 
