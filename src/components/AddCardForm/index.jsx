@@ -3,35 +3,45 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ADD_CARD } from "../../graphql/mutations";
 import { GET_CARDS } from "../../graphql/queries";
-import { ADD_TASK_BTN_NAME, COLUMN_NAMES_MAP } from "./constants";
+import {
+  ADD_TASK_BTN_NAME,
+  COLUMN_NAMES_MAP,
+  DEFAULT_TASK_STATUS,
+} from "./constants";
 
 const AddCardForm = ({ onComplete }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [column, setColumn] = useState("TODO");
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    column: DEFAULT_TASK_STATUS,
+  });
 
-  const [addCard] = useMutation(ADD_CARD, {
-    variables: {
-      title,
-      description,
-      column,
-    },
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+  };
+
+  const [addCard, { error }] = useMutation(ADD_CARD, {
+    variables: formData,
     update: (cache, { data: { addCard } }) => {
       const existingCards = cache.readQuery({ query: GET_CARDS });
-
-      cache.writeQuery({
-        query: GET_CARDS,
-        data: {
-          cards: [...existingCards.cards, addCard],
-        },
-      });
+      if (existingCards && existingCards.cards) {
+        cache.writeQuery({
+          query: GET_CARDS,
+          data: { cards: [...existingCards.cards, addCard] },
+        });
+      }
     },
     onCompleted: () => {
       onComplete();
-      setTitle("");
-      setDescription("");
+      setFormData({ title: "", description: "", column: "TODO" });
     },
   });
+
+  if (error) {
+    console.error("Error adding a card:", error.message);
+    // Optionally, display an error message to the user
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -41,26 +51,29 @@ const AddCardForm = ({ onComplete }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <input
+        name="title"
         className="w-full p-2 border rounded"
         type="text"
         placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={formData.title}
+        onChange={handleInputChange}
         required
       />
       <textarea
+        name="description"
         className="w-full p-2 border rounded"
         placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        value={formData.description}
+        onChange={handleInputChange}
       />
       <select
+        name="column"
         className="w-full p-2 border rounded"
-        value={column}
-        onChange={(e) => setColumn(e.target.value)}
+        value={formData.column}
+        onChange={handleInputChange}
       >
         {COLUMN_NAMES_MAP.map(({ key, name }) => (
-          <option key={name} value={key}>
+          <option key={key} value={key}>
             {name}
           </option>
         ))}
@@ -76,7 +89,7 @@ const AddCardForm = ({ onComplete }) => {
 };
 
 AddCardForm.propTypes = {
-  onComplete: PropTypes.func,
+  onComplete: PropTypes.func.isRequired,
 };
 
 export default AddCardForm;
