@@ -12,5 +12,5 @@ type Query {
 type Mutation {
   addCard(title: String!, description: String, column: String!): Card
   updateCard(id: ID!, title: String, description: String, column: String): Card
-  deleteCard(id: ID!): Card
+  deleteCard(id: ID!): String
 }

@@ -1,11 +1,17 @@
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { useDrop } from "react-dnd";
 import Card from "../Card";
+import {
+  BarsArrowUpIcon,
+  BarsArrowDownIcon,
+} from "@heroicons/react/24/outline";
 import { useMutation } from "@apollo/client";
 import { UPDATE_CARD } from "../../graphql/mutations";
 import { GET_CARDS } from "../../graphql/queries";
 
 const Column = ({ title, cards }) => {
+  const [isSorted, setIsSorted] = useState(false);
   const [updateCard] = useMutation(UPDATE_CARD, {
     update: (cache, { data: { updateCard } }) => {
       const existingCards = cache.readQuery({ query: GET_CARDS });
@@ -39,13 +45,35 @@ const Column = ({ title, cards }) => {
     });
   };
 
+  const toggleSort = () => {
+    setIsSorted(() => !isSorted);
+  };
+
+  const sortedCards = isSorted
+    ? [...cards].sort(
+        (a, b) => new Date(a?.creationDate) - new Date(b?.creationDate)
+      )
+    : cards;
+
   return (
     <div
       ref={drop}
-      className="flex-1 min-w-[240px] bg-gray-100 rounded-lg p-4 shadow space-y-2"
+      className="flex-1 min-w-[240px] bg-gray-100 rounded-lg p-4 shadow space-y-2 relative"
     >
-      <h2 className="text-lg font-semibold mb-4">{title}</h2>
-      {cards.map((card) => (
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-semibold">{title}</h2>
+        <button
+          onClick={toggleSort}
+          className="text-gray-500 hover:text-gray-700"
+        >
+          {isSorted ? (
+            <BarsArrowUpIcon className="h-5 w-5" />
+          ) : (
+            <BarsArrowDownIcon className="h-5 w-5" />
+          )}
+        </button>
+      </div>
+      {sortedCards.map((card) => (
         <Card key={card.id} {...card} />
       ))}
     </div>
