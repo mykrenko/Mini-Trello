@@ -20,6 +20,8 @@ const Column = ({ title, cards }) => {
         });
       }
     },
+    // Assuming a mock server, we don't expect it to actually perform the updatind,
+    // so the cache is manually updated to reflect the change.
   });
   const [, drop] = useDrop(() => ({
     accept: "CARD",

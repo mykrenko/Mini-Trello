@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const fs = require("fs");
@@ -9,15 +10,14 @@ const typeDefs = fs.readFileSync(path.join(__dirname, "../../schema.graphql"), {
 const resolvers = {
   Query: {
     cards: () => [
-      // Mock data; adjust as necessary for your application
       {
-        id: "1",
+        id: "1707704151846",
         title: "Learn GraphQL",
         description: "Read the official GraphQL docs.",
         column: "TODO",
       },
       {
-        id: "2",
+        id: "1707704151847",
         title: "Setup Mock Server",
         description: "Implement a mock server for testing.",
         column: "IN_PROGRESS",
