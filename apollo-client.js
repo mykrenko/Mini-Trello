@@ -1,7 +1,11 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
+
+const httpLink = new HttpLink({
+  uri: "http://localhost:4000", // URL of your GraphQL server
+});
 
 const client = new ApolloClient({
-  uri: "/graphql", // This can be server URI, but for mocking, it won't be used.
+  link: httpLink,
   cache: new InMemoryCache(),
 });
 

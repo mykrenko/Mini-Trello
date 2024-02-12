@@ -1,0 +1,16 @@
+type Card {
+  id: ID!
+  title: String!
+  description: String
+  column: String!
+}
+
+type Query {
+  cards(column: String): [Card]
+}
+
+type Mutation {
+  addCard(title: String!, description: String, column: String!): Card
+  updateCard(id: ID!, title: String, description: String, column: String): Card
+  deleteCard(id: ID!): Boolean
+}
