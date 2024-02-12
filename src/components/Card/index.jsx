@@ -114,12 +114,12 @@ const Card = ({ id, title, description, column }) => {
           <input
             value={state.title}
             onChange={(e) => handleChange(e, "title")}
-            className="w-full mb-2"
+            className="w-full mb-2 font-semibold"
           />
           <textarea
             value={state.description}
             onChange={(e) => handleChange(e, "description")}
-            className="w-full mb-2"
+            className="w-full mb-2 text-gray-600"
           />
           <button
             onClick={handleSave}

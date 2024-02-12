@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ADD_CARD } from "../../graphql/mutations";
 import { GET_CARDS } from "../../graphql/queries";
+import { ADD_TASK_BTN_NAME, COLUMN_NAMES_MAP } from "./constants";
 
 const AddCardForm = ({ onComplete }) => {
   const [title, setTitle] = useState("");
@@ -58,15 +59,17 @@ const AddCardForm = ({ onComplete }) => {
         value={column}
         onChange={(e) => setColumn(e.target.value)}
       >
-        <option value="TODO">TODO</option>
-        <option value="IN_PROGRESS">In Progress</option>
-        <option value="DONE">Done</option>
+        {COLUMN_NAMES_MAP.map(({ key, name }) => (
+          <option key={name} value={key}>
+            {name}
+          </option>
+        ))}
       </select>
       <button
         type="submit"
         className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
       >
-        Add Card
+        {ADD_TASK_BTN_NAME}
       </button>
     </form>
   );
